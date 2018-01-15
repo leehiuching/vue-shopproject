@@ -1,19 +1,22 @@
 <template>
-  <div>测试
+  <div>
     <router-view></router-view>
-    <el-rate
-    v-model="value2"
-    :colors="['#99A9BF', '#F7BA2A', '#FF9900']">
-    </el-rate>
   </div>
 </template>
 <script>
 export default {
   data () {
     return {
-      value2: 2
+      
     }
   }
 }
 </script>
+<style scoped >
+div {
+  height: 100%;
+  background-color: #267cb7;
+}
+</style>
+
 
