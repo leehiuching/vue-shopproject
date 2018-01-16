@@ -1,6 +1,6 @@
 <template>
     <el-container class="admin">
-        <el-aside width="200px">
+        <el-aside width="200">
             <Aside></Aside>
         </el-aside>
         <el-container>
