@@ -5,19 +5,21 @@
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item>内容管理</el-breadcrumb-item>
         </el-breadcrumb>
-        <el-button size="mini" plain icon="el-icon-plus">新增</el-button>
-        <el-button size="mini" plain icon="el-icon-check">全选</el-button>
-        <el-button size="mini" plain icon="el-icon-delete">删除</el-button>
-        <el-input
-            placeholder="请输入内容"
-            suffix-icon="el-icon-search"
-            v-model="gsListQuery.input21" 
-            size="mini"
-            style="width:180px;float:right"
-            @blur="getListData">
-        </el-input>
+        <div class="btns">
+            <el-button size="mini" plain icon="el-icon-plus">新增</el-button>
+            <el-button size="mini" plain icon="el-icon-check" @click="seleAll">全选</el-button>
+            <el-button size="mini" plain icon="el-icon-delete" @click="delListData">删除</el-button>
+            <el-input
+                placeholder="请输入内容"
+                suffix-icon="el-icon-search"
+                v-model="gsListQuery.input21" 
+                size="mini"
+                style="width:180px;float:right"
+                @blur="getListData">
+            </el-input>
+        </div>
         <el-table ref="multipleTable" tooltip-effect="dark" style="width: 100%"
-            :data="tableData3" >
+            :data="tableData3" @selection-change="handleSelectionChange">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column label="标题">
                 <template slot-scope="scope">
@@ -89,7 +91,8 @@
                 page: {
                     pageSizes: [10,20,30,40],
                     total:100
-                }
+                },
+                selections:[]
             }
         },
         methods: {
@@ -109,6 +112,41 @@
             handleCurrentChange(val){
                 this.gsListQuery.pageIndex = val;
                 this.getListData();
+            },
+            handleSelectionChange(selection){
+                this.selections = selection;               
+            },
+            del(){
+                // 获取到删除的id
+                let ids = this.selections.map(v=>v.id).join(',');
+                this.$http.get(this.$api.gsDel + ids).then(res=>{
+                    if (res.data.status == 0) {
+                        this.getListData();
+                        this.selections = [];
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    }
+                })
+            },
+            delListData(){
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                    }).then(() => {
+                        this.del();
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消删除'
+                        });          
+                    }
+                )              
+            },
+            seleAll(){
+                document.querySelector(".el-checkbox__inner").click();
             }
         },
         created () {
@@ -122,6 +160,14 @@
     color: rgba(0, 0, 0, 0.3);
     &.active {
         color: black;
+    }
+}
+.btns {
+    margin: 10px 0;
+}
+.cell {
+    a {
+        text-decoration: none;
     }
 }
 </style>

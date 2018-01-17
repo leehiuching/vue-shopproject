@@ -58,5 +58,8 @@
 </script>
 
 <style scoped>
-
+.el-menu {
+    height: 100%;
+    padding-top: 20px;
+}
 </style>

@@ -14,7 +14,7 @@ import App from "./component/App.vue";
 import routerConfig from "./router/index.js";
 
 import axios from "axios";
-axios.defaults.baseURL = "http://157.122.54.189:9095";
+axios.defaults.baseURL = "http://localhost:8899";
 axios.defaults.withCredentials=true;
 Vue.prototype.$http = axios;
 
